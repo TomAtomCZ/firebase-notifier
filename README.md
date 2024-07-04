@@ -1,18 +1,34 @@
 Firebase Notifier
 =================
 
-Provides [Firebase](https://firebase.google.com) integration for Symfony Notifier.
+Provides new [Firebase](https://firebase.google.com) HTTP v1 API integration for Symfony Notifier.
 
 DSN example
 -----------
 
 ```
-FIREBASE_DSN=firebase://USERNAME:PASSWORD@default
+GOOGLE_API_KEY=YOUR_API_KEY
+GOOGLE_CLIENT_ID=YOUR_CLIENT_KEY
+GOOGLE_CLIENT_SECRET=YOUR_CLIENT_SECRET
+FIREBASE_DSN=firebase://PROJECT_ID@default
+FIREBASE_JSON='{
+                 "key": "value",
+                 ...
+               }'
 ```
 
 where:
- - `USERNAME` is your Firebase username
- - `PASSWORD` is your Firebase password
+
+- `YOUR_API_KEY` is your Google API key
+- `YOUR_CLIENT_KEY` is your Google client ID
+- `YOUR_CLIENT_SECRET` is your Google client secret
+- `PROJECT_ID` is your Firebase project ID
+
+For `FIREBASE_JSON ` you have to download JSON file containing Firebase credentials.
+In [Firebase console](https://console.firebase.google.com) navigate to "Project settings" -> "Service accounts".
+Click "Generate new private key", download the JSON file and paste its contents.
+
+Google credentials can be obtained in [Google console](https://console.cloud.google.com).
 
 Adding Interactions to a Message
 --------------------------------
@@ -45,7 +61,7 @@ $chatter->send($chatMessage);
 Resources
 ---------
 
- * [Contributing](https://symfony.com/doc/current/contributing/index.html)
- * [Report issues](https://github.com/symfony/symfony/issues) and
-   [send Pull Requests](https://github.com/symfony/symfony/pulls)
-   in the [main Symfony repository](https://github.com/symfony/symfony)
+* [Contributing](https://symfony.com/doc/current/contributing/index.html)
+* [Report issues](https://github.com/symfony/symfony/issues) and
+  [send Pull Requests](https://github.com/symfony/symfony/pulls)
+  in the [main Symfony repository](https://github.com/symfony/symfony)
