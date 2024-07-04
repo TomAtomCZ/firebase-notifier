@@ -16,22 +16,22 @@ use Symfony\Component\Notifier\Message\MessageOptionsInterface;
 /**
  * @author Jeroen Spee <https://github.com/Jeroeny>
  *
- * @see https://firebase.google.com/docs/cloud-messaging/xmpp-server-ref.html
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
  */
 abstract class FirebaseOptions implements MessageOptionsInterface
 {
-    private string $to;
+    private string $topic;
 
     /**
-     * @see https://firebase.google.com/docs/cloud-messaging/xmpp-server-ref.html#notification-payload-support
+     * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
      */
     protected array $options;
 
     private array $data;
 
-    public function __construct(string $to, array $options, array $data = [])
+    public function __construct(string $topic, array $options, array $data = [])
     {
-        $this->to = $to;
+        $this->topic = $topic;
         $this->options = $options;
         $this->data = $data;
     }
@@ -39,7 +39,7 @@ abstract class FirebaseOptions implements MessageOptionsInterface
     public function toArray(): array
     {
         return [
-            'to' => $this->to,
+            'topic' => $this->topic,
             'notification' => $this->options,
             'data' => $this->data,
         ];
@@ -47,7 +47,7 @@ abstract class FirebaseOptions implements MessageOptionsInterface
 
     public function getRecipientId(): ?string
     {
-        return $this->to;
+        return $this->topic;
     }
 
     /**
