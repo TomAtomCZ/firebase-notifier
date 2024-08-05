@@ -12,7 +12,6 @@
 namespace Symfony\Component\Notifier\Bridge\Firebase;
 
 use Google\Client;
-use Google\Exception;
 use Google\Service\FirebaseCloudMessaging;
 use Symfony\Component\Notifier\Exception\InvalidArgumentException;
 use Symfony\Component\Notifier\Exception\TransportException;
@@ -72,7 +71,6 @@ final class FirebaseTransport extends AbstractTransport
     }
 
     /**
-     * @throws Exception
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      * @throws ServerExceptionInterface
@@ -83,10 +81,6 @@ final class FirebaseTransport extends AbstractTransport
     {
         if (!$message instanceof ChatMessage) {
             throw new UnsupportedMessageTypeException(__CLASS__, ChatMessage::class, $message);
-        }
-
-        if (empty($_ENV['FIREBASE_JSON'])) {
-            throw new InvalidArgumentException('The ENV variable FIREBASE_JSON is required to be set.');
         }
 
         $endpoint = sprintf('https://%s', $this->getEndpoint());
@@ -149,19 +143,15 @@ final class FirebaseTransport extends AbstractTransport
     /**
      * Create a temporary json file from the ENV variable and set it to the client auth config
      * @return string|null
-     * @throws Exception
      */
     protected function getAccessToken(): ?string
     {
-        $jsonTmp = tempnam(sys_get_temp_dir(), 'firebase_json');
-        file_put_contents($jsonTmp, $_ENV['FIREBASE_JSON']);
         $client = new Client();
-        $client->setAuthConfig($jsonTmp);
+        $client->useApplicationDefaultCredentials();
         $client->addScope(FirebaseCloudMessaging::FIREBASE_MESSAGING);
         $client->addScope(FirebaseCloudMessaging::CLOUD_PLATFORM);
         $client->fetchAccessTokenWithAssertion();
         $accessToken = $client->getAccessToken();
-        unlink($jsonTmp);
         return $accessToken['access_token'] ?? null;
     }
 }
