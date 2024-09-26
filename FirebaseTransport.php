@@ -91,12 +91,16 @@ final class FirebaseTransport extends AbstractTransport
             throw new InvalidArgumentException(sprintf('The "%s" transport required the "topic" option to be set.', __CLASS__));
         }
 
-        if (isset($options['notification']['validate_only'])) {
-            $validateOnly = $options['notification']['validate_only'];
-            unset($options['notification']['validate_only']);
+        // Unset notification from options if we do not want to send them at all - cannot be empty array nor null
+        if (!$options['notification']['sendNotification']) {
+            unset($options['notification']);
+        } else {
+            if (isset($options['notification']['validate_only'])) {
+                $validateOnly = $options['notification']['validate_only'];
+                unset($options['notification']['validate_only']);
+            }
+            $options['notification']['body'] = $message->getSubject();
         }
-
-        $options['notification']['body'] = $message->getSubject();
 
         if (empty($options['data'])) {
             unset($options['data']);

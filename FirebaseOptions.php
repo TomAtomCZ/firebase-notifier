@@ -73,6 +73,16 @@ abstract class FirebaseOptions implements MessageOptionsInterface
     /**
      * @return $this
      */
+    public function sendNotification(bool $sendNotification = true): static
+    {
+        $this->options['sendNotification'] = $sendNotification;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     public function data(array $data): static
     {
         $this->data = $data;
